@@ -1,0 +1,93 @@
+module.exports = function(grunt) {
+    'use strict'
+
+    const files_list = [
+        'dist/**',
+        'includes/**',
+        'languages/**',
+        'vendor/**',
+        'wptravelengine-lux-voyages.php',
+        'index.php',
+        'README.md',
+    ]
+
+    grunt.initConfig({
+
+        pkg: grunt.file.readJSON('package.json'),
+
+        addtextdomain: {
+            options: { textdomain: 'wptravelengine-lux-voyages' },
+            update_all_domains: {
+                options: { updateDomains: true },
+                src: ['*.php', '**/*.php', '!\.git/**/*', '!bin/**/*', '!node_modules/**/*', '!tests/**/*'],
+            },
+        },
+
+        wp_readme_to_markdown: {
+            your_target: { files: { 'README.md': 'readme.txt' } },
+        },
+
+        makepot: {
+            target: {
+                options: {
+                    domainPath: '/languages',
+                    exclude: ['\.git/*', 'bin/*', 'node_modules/*', 'tests/*'],
+                    mainFile: 'wptravelengine-lux-voyages.php',
+                    potFilename: 'wptravelengine-lux-voyages.pot',
+                    potHeaders: { poedit: true, 'x-poedit-keywordslist': true },
+                    type: 'wp-plugin', updateTimestamp: true,
+                },
+            },
+        },
+
+        clean: {
+            build: ['build'],
+            bundle: ['bundle'],
+        },
+
+        copy: {
+            bundle: {
+                dot: true,
+                expand: true,
+                src: files_list,
+                dest: 'bundle/<%= pkg.name %>/',
+            },
+        },
+
+        compress: {
+            build: {
+                options: {
+                    archive: 'bundle/<%= pkg.name %>_<%= pkg.version %>.zip',
+                    mode: 'zip',
+                },
+                expand: true,
+                cwd: 'build/<%= pkg.name %>/',
+                src: ['**/*'],
+                dest: '<%= pkg.name %>/',
+            },
+            bundle: {
+                options: {
+                    archive: 'bundle/<%= pkg.name %>_<%= pkg.version %>.zip',
+                    mode: 'zip',
+                },
+                expand: true,
+                cwd: 'bundle/<%= pkg.name %>/',
+                src: ['**/*'],
+                dest: '<%= pkg.name %>/',
+            },
+        },
+
+    })
+
+    grunt.loadNpmTasks('grunt-wp-i18n')
+    grunt.loadNpmTasks('grunt-contrib-clean')
+    grunt.loadNpmTasks('grunt-contrib-copy')
+    grunt.loadNpmTasks('grunt-contrib-compress')
+
+    grunt.registerTask('default', ['i18n'])
+    grunt.registerTask('i18n', ['addtextdomain', 'makepot'])
+    grunt.registerTask('build', ['clean:bundle', 'copy:bundle', 'i18n'])
+    grunt.registerTask('bundle', ['build', 'compress:bundle'])
+
+    grunt.util.linefeed = '\n'
+}

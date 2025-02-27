@@ -1,0 +1,23 @@
+{
+  "name": "wptravelengine-lux-voyages",
+  "version": "1.0.0",
+  "description": "WP Travel Engine addon to with lux voyages customization",
+  "main": "wptravelengine-lux-voyages.php",
+  "repository": "git@github.com:Codewing-Solutions/wptravelengine-lux-voyages.git",
+  "author": "WP Travel Engine",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "start": "npx wp-scripts start",
+    "build": "npx wp-scripts build",
+    "bundle": "composer install --no-dev && yarn build && npx grunt bundle"
+  },
+  "devDependencies": {
+      "@wordpress/scripts": "^30.5.1",
+      "lodash": "^4.17.21",
+      "grunt": "^1.6.1",
+      "grunt-wp-i18n": "^1.0.3",
+      "grunt-contrib-clean": "^2.0.1",
+      "grunt-contrib-copy": "^1.0.0",
+      "grunt-contrib-compress": "^2.0.0"
+  }
+}
