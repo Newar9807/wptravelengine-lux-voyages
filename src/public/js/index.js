@@ -1,27 +1,27 @@
 import domReady from '@wordpress/dom-ready'
-import { createRoot } from '@wordpress/element'
 import { addFilter } from '@wordpress/hooks'
 import { __ } from '@wordpress/i18n'
-import { Price } from '@wptravelengine/public/fragments'
 import _ from 'lodash'
 import moment from 'moment'
 
 addFilter('wptravelengine.flatpickr.options', 'wptravelengine.lux-voyages.conditionalPricing', (options, tripDates) => {
     if (_.isEmpty(tripDates)) return options
+    const { priceFormat } = wteL10n
     const allDates = tripDates.find(({ package: p }) => p.is_primary)?.dates || {}
     return {
         ...options,
         onDayCreate: (dObj, dStr, fp, dayElem) => {
-            const dateString = moment(dayElem.dateObj).format('YYYY-MM-DD')
+            const selectedDate = dayElem.dateObj
+            const dateString = moment(selectedDate).format('YYYY-MM-DD')
             const price = allDates[dateString]?.pricing.find(({ is_primary }) => is_primary)?.price ?? ''
+
+            // if is next month or previous month, then don't show price
+            const isPrevMonthDay = dayElem.classList.contains('prevMonthDay')
+            const isNextMonthDay = dayElem.classList.contains('nextMonthDay')
+            if (isPrevMonthDay || isNextMonthDay) return;
+
             if (price) {
-                let priceContainer = document.createElement('span')
-                priceContainer.classList.add('price-info')
-                if (!priceContainer._reactRoot) {
-                    priceContainer._reactRoot = createRoot(priceContainer)
-                }
-                priceContainer._reactRoot.render(<Price noHTML value={price} />)
-                dayElem.insertAdjacentElement('beforeend', priceContainer)
+                dayElem.innerHTML += `<span class='price-info'>${priceFormat(price).format(true, true)}</span>`;
             }
         }
 
