@@ -74,7 +74,7 @@ class Plugin {
 	 */
 	public function register_hooks(): void {
 		// add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_assets' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_assets' ), 11 );
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		// add_filter( 'wptravelengine_settings_ui_config', array( $this, 'add_settings_ui_config' ) );
 	}
