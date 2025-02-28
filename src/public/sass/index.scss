@@ -12,3 +12,15 @@
         border-radius: 50px;
     }
 }
+
+.wpte-checkout__page-layout {
+    .wpte-checkout__booking-summary-table {
+        tbody {
+            tr:last-child {
+                &:not(.wpte-checkout__table-spacer) {
+                    display: none;
+                }
+            }
+        }
+    }
+}
