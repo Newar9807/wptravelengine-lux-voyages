@@ -29,6 +29,22 @@ addFilter('wptravelengine.flatpickr.options', 'wptravelengine.lux-voyages.condit
 }, 10, 2)
 
 domReady(() => {
+
+    let isStopped = false;
+    const observer = new MutationObserver((mutations) => {
+        const accUpgradesToggles = document.querySelectorAll('.accommodation-upgrades-toggle-button');
+        if (accUpgradesToggles.length > 0 && !isStopped) {
+            accUpgradesToggles.forEach(btn => {
+                const element = document.createElement('span');
+                element.classList.add('accommodation-upgrades-toggle-button-text');
+                element.innerHTML = __('Click here to view', 'wptravelengine-lux-voyages');
+                btn.parentNode.insertBefore(element, btn);
+            });
+            isStopped = true;
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
     const checkoutForm = document.getElementById('wptravelengine-checkout__form');
 
     if (!checkoutForm) return;

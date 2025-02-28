@@ -6,7 +6,10 @@ module.exports = (env, argv) => {
         ...config,
         mode: 'development',
         entry: {
-            public: './src/public/js/index.js',
+            public: [
+                './src/public/js/index.js',
+                './src/public/sass/index.scss'
+            ],
             admin: './src/admin/js/index.js',
         },
         output: {
