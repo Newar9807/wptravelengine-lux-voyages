@@ -31,6 +31,7 @@ addFilter('wptravelengine.flatpickr.options', 'wptravelengine.lux-voyages.condit
 domReady(() => {
 
     const processedButtons = new Set(); // Use Set to track processed buttons
+    const processedLastTd = new Set(); // Use Set to track processed last td
     const observer = new MutationObserver((mutations) => {
         const accUpgradesToggles = document.querySelectorAll('.accommodation-upgrades-toggle-button');
 
@@ -44,6 +45,13 @@ domReady(() => {
                     processedButtons.add(btn); // Mark this button as processed
                 }
             });
+        }
+
+        const lastTr = document.querySelector('.wpte-checkout__booking-summary-deposit');
+        const lastTd = lastTr.querySelector('td:last-child strong');
+        if (lastTd && !processedLastTd.has(lastTd)) {
+            lastTd.innerHTML = lastTd.innerHTML.replace('- ', '');
+            processedLastTd.add(lastTd);
         }
     });
     observer.observe(document.body, { childList: true, subtree: true });
