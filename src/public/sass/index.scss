@@ -22,3 +22,9 @@
         }
     }
 }
+
+@media (max-width: 767px) {
+    .wte-process-tab-content-wrapper .flatpickr-calendar .flatpickr-innerContainer .flatpickr-rContainer .dayContainer .flatpickr-day .price-info {
+        font-size: 10px;
+    }
+}
