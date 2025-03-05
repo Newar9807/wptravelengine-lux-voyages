@@ -128,6 +128,13 @@ class Plugin {
 			filemtime( WPTRAVELENGINE_LUX_VOYAGES_DATE_PLUGIN_PATH . 'dist/public.js' ),
 			true
 		);
+
+		wp_enqueue_style(
+			'wptravelengine-lux-voyages-public',
+			WPTRAVELENGINE_LUX_VOYAGES_DATE_PLUGIN_URL . 'dist/public.css',
+			array(),
+			filemtime( WPTRAVELENGINE_LUX_VOYAGES_DATE_PLUGIN_PATH . 'dist/public.css' )
+		);
 	}
 
 	/**
