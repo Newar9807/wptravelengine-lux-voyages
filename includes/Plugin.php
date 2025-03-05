@@ -74,7 +74,7 @@ class Plugin {
 	 */
 	public function register_hooks(): void {
 		// add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_assets' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_assets' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_assets' ), 11 );
 		add_action( 'init', array( $this, 'load_textdomain' ) );
 		// add_filter( 'wptravelengine_settings_ui_config', array( $this, 'add_settings_ui_config' ) );
 	}
@@ -127,6 +127,13 @@ class Plugin {
 			array( 'wptravelengine-exports' ),
 			filemtime( WPTRAVELENGINE_LUX_VOYAGES_DATE_PLUGIN_PATH . 'dist/public.js' ),
 			true
+		);
+
+		wp_enqueue_style(
+			'wptravelengine-lux-voyages-public',
+			WPTRAVELENGINE_LUX_VOYAGES_DATE_PLUGIN_URL . 'dist/public.css',
+			array(),
+			filemtime( WPTRAVELENGINE_LUX_VOYAGES_DATE_PLUGIN_PATH . 'dist/public.css' )
 		);
 	}
 

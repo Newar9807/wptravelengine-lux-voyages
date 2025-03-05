@@ -1,5 +1,5 @@
 import domReady from '@wordpress/dom-ready'
-import { addFilter } from '@wordpress/hooks'
+import { addFilter, removeFilter } from '@wordpress/hooks'
 import { __ } from '@wordpress/i18n'
 import _ from 'lodash'
 import moment from 'moment'
@@ -28,6 +28,28 @@ addFilter('wptravelengine.flatpickr.options', 'wptravelengine.lux-voyages.condit
     }
 }, 10, 2)
 
+removeFilter('wptravelengine.tripBookingModal.bookingDetails', 'wptravelengineAccommodation', 10, 2)
+
+addFilter('wptravelengine.tripBookingModal.bookingDetails', 'wptravelengineLuxVoyages', (bookingDetails, summary) => {
+    if (summary?.accommodation && summary?.accommodation.some((acc) => acc.qty > 0)) {
+        bookingDetails.splice(1, 0, {
+            key: 'accommodation',
+            title: wteL10n?.l10n?.accommodationTitle || __('Accommodations', 'wptravelengine-lux-voyages'),
+            items: summary.accommodation.reduce((acc, curr) => {
+                acc.push({
+                    ...curr,
+                    childrens: curr.childrens.map(c => ({
+                        ...c,
+                        label: __('Upgrade: ', 'wptravelengine-lux-voyages') + c.label,
+                    }))
+                })
+                return acc
+            }, []),
+        })
+    }
+    return bookingDetails
+}, 10, 2)
+
 domReady(() => {
 
     const processedButtons = new Set(); // Use Set to track processed buttons
@@ -42,7 +64,7 @@ domReady(() => {
                     element.classList.add('accommodation-upgrades-toggle-button-text');
                     element.innerHTML = __('Click here to view', 'wptravelengine-lux-voyages');
                     btn.parentNode.insertBefore(element, btn);
-                    processedButtons.add(btn); // Mark this button as processed
+                    processedButtons.add(btn);
                 }
             });
         }
